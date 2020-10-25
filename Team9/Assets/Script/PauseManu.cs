@@ -18,7 +18,7 @@ public class PauseManu : MonoBehaviour
 
    
     //現在セーブ中か？
-    public bool pausing;
+    public static bool pausing;
 
 
     // Start is called before the first frame update

@@ -20,7 +20,7 @@ public class ManuSelect : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-
+        
     }
     void OnEnable()
     {
@@ -67,21 +67,26 @@ public class ManuSelect : MonoBehaviour
     
     public void TitleButton()
     {
-
-        FadeManager.FadeOut("Title");
+        Time.timeScale = 1f;
+        PauseManu.pausing = false;
+        GameManagerScene.isTitle = true;
         Exit.gameObject.SetActive(false);
         Title.gameObject.SetActive(false);
         ReStart.gameObject.SetActive(false);
         Panel.gameObject.SetActive(false);
+        
     }
 
     public void Restart()
     {
-        FadeManager.FadeOut("koyama");
+        Time.timeScale = 1f;
+        PauseManu.pausing = false;
+        GameManagerScene.isReTurn = true;
         Exit.gameObject.SetActive(false);
         Title.gameObject.SetActive(false);
         ReStart.gameObject.SetActive(false);
         Panel.gameObject.SetActive(false);
+      
     }
 }
 
