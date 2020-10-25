@@ -5,33 +5,85 @@ using UnityEngine;
 public class LaserScript : MonoBehaviour
 {
     [SerializeField]
-    GameObject Enemy;
-    GameObject gameObj;
+    GameObject enemy;
+    EnemyScript enemyScript;
     Rigidbody2D rb;
+
+    string Direction;
+    string Type;
 
     // Start is called before the first frame update
     void Start()
     {
-        gameObj = GetComponent<GameObject>();
+        enemyScript = enemy.GetComponent<EnemyScript>();
+        Direction = enemyScript.RetrunDirection();
     }
 
     // Update is called once per frame
     void Update()
     {
-        var velocity = rb.velocity;
-        velocity = Vector2.zero;
-
-        velocity += new Vector2(1.0f,1.0f) * 64;
-        rb.velocity = velocity;
+        if (Direction == "Right")
+        {
+            rb.transform.position = new Vector3(10.0f, 0.0f, 0.0f);
+        }
+        if (Direction == "Down")
+        {
+            rb.transform.position = new Vector3(0.0f, -10.0f, 0.0f);
+        }
+        if (Direction == "Left")
+        {
+            rb.transform.position = new Vector3(-10.0f, 0.0f, 0.0f);
+        }
+        if (Direction == "Top")
+        {
+            rb.transform.position = new Vector3(0.0f, 10.0f, 0.0f);
+        }
     }
 
-    
-    void OnCollisionEnter2D(Collision2D other)
+    void ChangeSprite()
     {
-        if (other.gameObject.CompareTag("Stage")|| other.gameObject.CompareTag("Player"))
+        if (Direction == "right")
+        {
+            //mainSpriteRender.sprite = defZombie_r;
+            rb.transform.rotation = new Quaternion(transform.rotation.x, transform.rotation.y, 0.0f, transform.rotation.w);
+        }
+        if (Direction == "Down")
+        {
+            //mainSpriteRender.sprite = defZombie_l;
+            rb.transform.rotation = new Quaternion(transform.rotation.x, transform.rotation.y, 90.0f, transform.rotation.w);
+        }
+        if (Direction == "Left")
+        {
+            //mainSpriteRender.sprite = defZombie_r;
+            rb.transform.rotation = new Quaternion(transform.rotation.x, transform.rotation.y, 180.0f, transform.rotation.w);
+        }
+        if (Direction == "Top")
+        {
+            //mainSpriteRender.sprite = defZombie_r;
+            rb.transform.rotation = new Quaternion(transform.rotation.x, transform.rotation.y, 270.0f, transform.rotation.w);
+        }
+    }
+
+    void OnCollision2D(Collision2D other)
+    {
+        if (other.gameObject.CompareTag("Stage"))
+        {
+            Destroy(gameObject);
+        }
+
+        if (other.gameObject.CompareTag("Player"))
         {
             Destroy(gameObject);
         }
     }
-    
+
+    public string ReturnDirection()
+    {
+        return Direction;
+    }
+
+    public string RetrunType()
+    {
+        return Type;
+    }
 }
