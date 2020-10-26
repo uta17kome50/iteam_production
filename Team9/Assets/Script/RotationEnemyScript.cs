@@ -13,19 +13,21 @@ public class RotationEnemyScript : MonoBehaviour
     public GameObject MissileObj;
 
     Rigidbody2D rb;
-    GameObject Player;
+    public GameObject Player;
 
     SpriteRenderer MainSpriteRenderer;
     public string EnemyName;
     public string Direction;
-    bool IsMovePlayer;
+    public bool IsMovePlayer;
+    public int CountLaser;
 
     // Start is called before the first frame update
     void Start()
     {
         //Player = GameObject.Find("Player");
         IsMovePlayer = false;
-        MainSpriteRenderer.sprite = GetComponent<Sprite>();
+        MainSpriteRenderer = gameObject.GetComponent<SpriteRenderer>();
+        rb = gameObject.GetComponent<Rigidbody2D>();
         if (EnemyName == "Laser")
         {
             MainSpriteRenderer.sprite = LezarEnemy;
@@ -39,7 +41,6 @@ public class RotationEnemyScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        ChangeSprite();
         //IsMovePlayer = 
         if (IsMovePlayer == true)
         {
@@ -47,18 +48,19 @@ public class RotationEnemyScript : MonoBehaviour
             {
                 Direction = "Down";
             }
-            if (Direction == "Down")
+            else if (Direction == "Down")
             {
                 Direction = "Left";
             }
-            if (Direction == "Left")
+            else if (Direction == "Left")
             {
                 Direction = "Top";
             }
-            if (Direction == "Top")
+            else if (Direction == "Top")
             {
                 Direction = "Right";
             }
+            ChangeSprite();
 
             switch (Direction)
             {
@@ -72,7 +74,12 @@ public class RotationEnemyScript : MonoBehaviour
                         }
                         if (EnemyName == "Missile")
                         {
-                            Instantiate(MissileObj, transform.position + new Vector3(1.0f, 0.0f, 0.0f), Quaternion.identity);
+                            if (CountLaser == 3)
+                            {
+                                Instantiate(MissileObj, transform.position + new Vector3(2.0f, 0.0f, 0.0f), Quaternion.identity);
+                                CountLaser = 0;
+                            }
+                            CountLaser++;
                         }
                     }
                     break;
@@ -86,7 +93,12 @@ public class RotationEnemyScript : MonoBehaviour
                         }
                         if (EnemyName == "Missile")
                         {
-                            Instantiate(MissileObj, transform.position + new Vector3(0.0f, -1.0f, 0.0f), Quaternion.identity);
+                            if (CountLaser == 3)
+                            {
+                                Instantiate(MissileObj, transform.position + new Vector3(0.0f, -2.0f, 0.0f), Quaternion.identity);
+                                CountLaser = 0;
+                            }
+                            CountLaser++;
                         }
                     }
                     break;
@@ -100,7 +112,12 @@ public class RotationEnemyScript : MonoBehaviour
                         }
                         if (EnemyName == "Missile")
                         {
-                            Instantiate(MissileObj, transform.position + new Vector3(-1.0f, 0.0f, 0.0f), Quaternion.identity);
+                            if (CountLaser == 3)
+                            {
+                                Instantiate(MissileObj, transform.position + new Vector3(-2.0f, 0.0f, 0.0f), Quaternion.identity);
+                                CountLaser = 0;
+                            }
+                            CountLaser++;
                         }
                     }
                     break;
@@ -114,7 +131,12 @@ public class RotationEnemyScript : MonoBehaviour
                         }
                         if (EnemyName == "Missile")
                         {
-                            Instantiate(MissileObj, transform.position + new Vector3(0.0f, 1.0f, 0.0f), Quaternion.identity);
+                            if (CountLaser == 3)
+                            {
+                                Instantiate(MissileObj, transform.position + new Vector3(0.0f, 2.0f, 0.0f), Quaternion.identity);
+                                CountLaser = 0;
+                            }
+                            CountLaser++;
                         }
                     }
                     break;
@@ -125,26 +147,28 @@ public class RotationEnemyScript : MonoBehaviour
 
     void ChangeSprite()
     {
-        if (Direction == "right")
+        Quaternion q = transform.rotation;
+        if (Direction == "Right")
         {
             //mainSpriteRender.sprite = defZombie_r;
-            rb.transform.rotation = new Quaternion(transform.rotation.x, transform.rotation.y, 0.0f, transform.rotation.w);
+            q = Quaternion.Euler(0f, 0f, 0f);
         }
         if (Direction == "Down")
         {
             //mainSpriteRender.sprite = defZombie_l;
-            rb.transform.rotation = new Quaternion(transform.rotation.x, transform.rotation.y, 90.0f, transform.rotation.w);
+            q = Quaternion.Euler(0f, 0f, 270f);
         }
         if (Direction == "Left")
         {
             //mainSpriteRender.sprite = defZombie_r;
-            rb.transform.rotation = new Quaternion(transform.rotation.x, transform.rotation.y, 180.0f, transform.rotation.w);
+            q = Quaternion.Euler(0f, 0f, 180f);
         }
         if (Direction == "Top")
         {
             //mainSpriteRender.sprite = defZombie_r;
-            rb.transform.rotation = new Quaternion(transform.rotation.x, transform.rotation.y, 270.0f, transform.rotation.w);
+            q = Quaternion.Euler(0f, 0f, 90f);
         }
+        transform.rotation = q;
     }
 
     public string RetrunDirection()

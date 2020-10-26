@@ -14,28 +14,20 @@ public class EnemyScript : MonoBehaviour
     public GameObject LezarObj;
     public GameObject MissileObj;
 
-    GameObject Player;
+    public GameObject Player;
 
     SpriteRenderer MainSpriteRenderer;
     public string EnemyName;
     public string Direction;
-    bool IsMovePlayer;
+    public bool IsMovePlayer;
+    public int CountLaser;
 
     // Start is called before the first frame update
     void Start()
     {
+        MainSpriteRenderer = gameObject.GetComponent<SpriteRenderer>();
+        rb = gameObject.GetComponent<Rigidbody2D>();
         IsMovePlayer = false;
-        MainSpriteRenderer.sprite = GetComponent<Sprite>();
-        if (EnemyName == "Laser")
-        {
-            MainSpriteRenderer.sprite = LezarEnemy;
-        }
-        if (EnemyName == "Missile")
-        {
-            MainSpriteRenderer.sprite = MissileEnemy;
-        }
-        IsMovePlayer = false;
-        MainSpriteRenderer.sprite = GetComponent<Sprite>();
         if (EnemyName == "Laser")
         {
             MainSpriteRenderer.sprite = LezarEnemy;
@@ -49,8 +41,9 @@ public class EnemyScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        Debug.Log(Player.transform.position);
+        Debug.Log(rb.transform.position);
         ChangeSprite();
-        //IsMovePlayer = 
         if (IsMovePlayer == true)
         {
             switch (Direction)
@@ -61,11 +54,16 @@ public class EnemyScript : MonoBehaviour
                     {
                         if (EnemyName == "Laser")
                         {
-                            Instantiate(LezarObj, transform.position + new Vector3(1.0f, 0.0f, 0.0f), Quaternion.identity);
+                            Instantiate(LezarObj, transform.position + new Vector3(2.0f, 0.0f, 0.0f), Quaternion.identity);
                         }
                         if (EnemyName == "Missile")
                         {
-                            Instantiate(MissileObj, transform.position + new Vector3(1.0f, 0.0f, 0.0f), Quaternion.identity);
+                            if (CountLaser == 3)
+                            {
+                                Instantiate(MissileObj, transform.position + new Vector3(2.0f, 0.0f, 0.0f), Quaternion.identity);
+                                CountLaser = 0;
+                            }
+                            CountLaser++;
                         }
                     }
                     break;
@@ -75,11 +73,16 @@ public class EnemyScript : MonoBehaviour
                     {
                         if (EnemyName == "Laser")
                         {
-                            Instantiate(LezarObj, transform.position + new Vector3(0.0f, -1.0f, 0.0f), Quaternion.identity);
+                            Instantiate(LezarObj, transform.position + new Vector3(0.0f, -2.0f, 0.0f), Quaternion.identity);
                         }
                         if (EnemyName == "Missile")
                         {
-                            Instantiate(MissileObj, transform.position + new Vector3(0.0f, -1.0f, 0.0f), Quaternion.identity);
+                            if (CountLaser == 3)
+                            {
+                                Instantiate(MissileObj, transform.position + new Vector3(0.0f, -2.0f, 0.0f), Quaternion.identity);
+                                CountLaser = 0;
+                            }
+                            CountLaser++;
                         }
                     }
                     break;
@@ -89,11 +92,16 @@ public class EnemyScript : MonoBehaviour
                     {
                         if (EnemyName == "Laser")
                         {
-                            Instantiate(LezarObj, transform.position + new Vector3(-1.0f, 0.0f, 0.0f), Quaternion.identity);
+                            Instantiate(LezarObj, transform.position + new Vector3(-2.0f, 0.0f, 0.0f), Quaternion.identity);
                         }
                         if (EnemyName == "Missile")
                         {
-                            Instantiate(MissileObj, transform.position + new Vector3(-1.0f, 0.0f, 0.0f), Quaternion.identity);
+                            if (CountLaser == 3)
+                            {
+                                Instantiate(MissileObj, transform.position + new Vector3(-2.0f, 0.0f, 0.0f), Quaternion.identity);
+                                CountLaser = 0;
+                            }
+                            CountLaser++;
                         }
                     }
                     break;
@@ -103,40 +111,52 @@ public class EnemyScript : MonoBehaviour
                     {
                         if (EnemyName == "Laser")
                         {
-                            Instantiate(LezarObj, transform.position + new Vector3(0.0f, 1.0f, 0.0f), Quaternion.identity);
+                            Instantiate(LezarObj, transform.position + new Vector3(0.0f, 2.0f, 0.0f), Quaternion.identity);
                         }
                         if (EnemyName == "Missile")
                         {
-                            Instantiate(MissileObj, transform.position + new Vector3(0.0f, 1.0f, 0.0f), Quaternion.identity);
+                            if (CountLaser == 3)
+                            {
+                                Instantiate(MissileObj, transform.position + new Vector3(0.0f, 2.0f, 0.0f), Quaternion.identity);
+                                CountLaser = 0;
+                            }
+                            CountLaser++;
                         }
                     }
                     break;
             }
+            IsMovePlayer = false;
         }
     }
 
     void ChangeSprite()
     {
-        if (Direction == "right")
+        Quaternion q = transform.rotation;
+        if (Direction == "Right")
         {
             //mainSpriteRender.sprite = defZombie_r;
-            rb.transform.rotation = new Quaternion(transform.rotation.x, transform.rotation.y, 0.0f, transform.rotation.w);
+            //rb.transform.rotation = new Quaternion(transform.rotation.x, transform.rotation.y, 0.0f, transform.rotation.w);
+            q = Quaternion.Euler(0f, 0f, 0f);
         }
         if (Direction == "Down")
         {
             //mainSpriteRender.sprite = defZombie_l;
-            rb.transform.rotation = new Quaternion(transform.rotation.x, transform.rotation.y, 90.0f, transform.rotation.w);
+            //rb.transform.rotation = new Quaternion(transform.rotation.x, transform.rotation.y, 90.0f, transform.rotation.w);
+            q = Quaternion.Euler(0f, 0f, 270f);
         }
         if (Direction == "Left")
         {
             //mainSpriteRender.sprite = defZombie_r;
-            rb.transform.rotation = new Quaternion(transform.rotation.x, transform.rotation.y, 180.0f, transform.rotation.w);
+            //rb.transform.rotation = new Quaternion(transform.rotation.x, transform.rotation.y, 180.0f, transform.rotation.w);
+            q = Quaternion.Euler(0f, 0f, 180f);
         }
         if (Direction == "Top")
         {
             //mainSpriteRender.sprite = defZombie_r;
-            rb.transform.rotation = new Quaternion(transform.rotation.x, transform.rotation.y, 270.0f, transform.rotation.w);
+            //rb.transform.rotation = new Quaternion(transform.rotation.x, transform.rotation.y, 270.0f, transform.rotation.w);
+            q = Quaternion.Euler(0f, 0f, 90f);
         }
+        transform.rotation = q;
     }
 
     public string RetrunDirection()
